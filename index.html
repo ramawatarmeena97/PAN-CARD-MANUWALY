@@ -5,10 +5,36 @@
 <title>Manual PAN Card Print Portal</title>
 
 <style>
+*{box-sizing:border-box;font-family:Arial}
 body{
   margin:0;
   background:linear-gradient(135deg,#1e3c72,#2a5298);
-  font-family:Arial, sans-serif;
+}
+
+/* LOGIN */
+.login-box{
+  width:350px;
+  margin:120px auto;
+  background:white;
+  padding:30px;
+  border-radius:12px;
+  box-shadow:0 0 20px rgba(0,0,0,.4);
+}
+.login-box h2{text-align:center;color:#1e3c72}
+.login-box input{
+  width:100%;
+  padding:10px;
+  margin:10px 0;
+}
+.login-box button{
+  width:100%;
+  padding:12px;
+  background:#1e3c72;
+  color:white;
+  border:none;
+  border-radius:6px;
+  font-size:16px;
+  cursor:pointer;
 }
 
 /* HEADER */
@@ -16,211 +42,188 @@ body{
   background:#0b2c55;
   color:white;
   padding:15px;
-  text-align:center;
-  font-size:22px;
-  letter-spacing:1px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.header span{font-size:14px}
+.logout{
+  background:#dc3545;
+  border:none;
+  padding:8px 14px;
+  color:white;
+  border-radius:6px;
+  cursor:pointer;
 }
 
-/* MAIN LAYOUT */
+/* MAIN */
 .main{
   display:flex;
-  gap:20px;
   padding:20px;
+  gap:20px;
 }
 
-/* LEFT FORM PANEL */
+/* PANEL */
 .panel{
   width:30%;
   background:white;
-  border-radius:12px;
   padding:20px;
-  box-shadow:0 0 15px rgba(0,0,0,0.3);
+  border-radius:12px;
 }
-
-.panel h3{
-  margin-top:0;
-  color:#0b2c55;
-  text-align:center;
-}
-
+.panel h3{text-align:center;color:#0b2c55}
 .panel input{
   width:100%;
   padding:8px;
   margin:6px 0;
-  border-radius:6px;
-  border:1px solid #ccc;
 }
 
-.panel label{
-  font-size:13px;
-  font-weight:bold;
-}
-
+/* BUTTONS */
 .btn{
   width:48%;
   padding:10px;
   margin-top:10px;
   border:none;
   border-radius:6px;
-  font-size:15px;
   cursor:pointer;
-}
-
-.preview{
-  background:#007bff;
   color:white;
 }
+.preview{background:#007bff}
+.print{background:#28a745}
 
-.print{
-  background:#28a745;
-  color:white;
-}
-
-/* RIGHT CARD PREVIEW */
+/* PREVIEW */
 .preview-area{
   width:70%;
   background:#f5f5f5;
   border-radius:12px;
   padding:15px;
-  box-shadow:0 0 15px rgba(0,0,0,0.3);
   display:flex;
   justify-content:center;
 }
 
-/* PAN CARD */
+/* CARD */
 .card{
   width:856px;
   height:539px;
-  position:relative;
   background:url('front.png') no-repeat;
   background-size:100% 100%;
-  border-radius:18px;
+  position:relative;
 }
 
-/* IMAGE POSITIONS */
-.photo{
-  position:absolute;
-  top:140px;
-  left:35px;
-  width:170px;
-  height:150px;
-}
-.qr{
-  position:absolute;
-  top:135px;
-  right:30px;
-  width:260px;
-}
-.sign{
-  position:absolute;
-  bottom:45px;
-  left:250px;
-  width:100px;
-}
+/* IMAGES */
+.photo{position:absolute;top:140px;left:35px;width:170px;height:150px}
+.qr{position:absolute;top:135px;right:30px;width:260px}
+.sign{position:absolute;bottom:45px;left:250px;width:100px}
 
 /* TEXT */
-.pan{
-  position:absolute;
-  top:220px;
-  left:310px;
-  font-size:28px;
-  font-weight:bold;
-}
-.name{
-  position:absolute;
-  top:300px;
-  left:220px;
-  font-size:28px;
-}
-.fname{
-  position:absolute;
-  top:370px;
-  left:300px;
-  font-size:28px;
-}
-.dob{
-  position:absolute;
-  top:480px;
-  left:30px;
-  font-size:28px;
-}
+.pan{position:absolute;top:220px;left:310px;font-size:28px;font-weight:bold}
+.name{position:absolute;top:300px;left:220px;font-size:28px}
+.fname{position:absolute;top:370px;left:300px;font-size:28px}
+.dob{position:absolute;top:480px;left:30px;font-size:28px}
 
 /* PRINT */
 @media print{
-  body{ background:white; }
-  .header,.panel{ display:none; }
-  .preview-area{ box-shadow:none; }
+  .header,.panel{display:none}
 }
 </style>
 </head>
 
 <body>
 
-<div class="header">
-  MANUAL PAN CARD PRINT PORTAL
+<!-- LOGIN PAGE -->
+<div id="loginPage" class="login-box">
+  <h2>Admin Login</h2>
+  <input id="loginUser" placeholder="Username">
+  <input id="loginPass" type="password" placeholder="Password">
+  <button onclick="login()">Login</button>
 </div>
 
-<div class="main">
+<!-- DASHBOARD -->
+<div id="dashboard" style="display:none">
 
-  <!-- LEFT FORM -->
-  <div class="panel">
-    <h3>PAN DETAILS</h3>
-
-    <label>PAN Number</label>
-    <input id="panInput">
-
-    <label>Name</label>
-    <input id="nameInput">
-
-    <label>Father Name</label>
-    <input id="fnameInput">
-
-    <label>Date of Birth</label>
-    <input id="dobInput" placeholder="DD-MM-YYYY">
-
-    <label>Photo</label>
-    <input type="file" id="photoInput" accept="image/*">
-
-    <label>Signature</label>
-    <input type="file" id="signInput" accept="image/*">
-
-    <div style="display:flex;justify-content:space-between;">
-      <button class="btn preview" onclick="updateCard()">Preview</button>
-      <button class="btn print" onclick="window.print()">Print</button>
+  <div class="header">
+    <div>
+      MANUAL PAN CARD PRINT PORTAL<br>
+      <span>Welcome, <b id="adminName"></b></span>
     </div>
+    <button class="logout" onclick="logout()">Logout</button>
   </div>
 
-  <!-- RIGHT PREVIEW -->
-  <div class="preview-area">
-    <div class="card">
-      <img id="photoImg" class="photo">
-      <img id="qrImg" class="qr">
-      <img id="signImg" class="sign">
+  <div class="main">
 
-      <div class="pan" id="panText"></div>
-      <div class="name" id="nameText"></div>
-      <div class="fname" id="fnameText"></div>
-      <div class="dob" id="dobText"></div>
+    <div class="panel">
+      <h3>PAN DETAILS</h3>
+
+      <input id="panInput" placeholder="PAN Number">
+      <input id="nameInput" placeholder="Name">
+      <input id="fnameInput" placeholder="Father Name">
+      <input id="dobInput" placeholder="DD-MM-YYYY">
+      <input type="file" id="photoInput">
+      <input type="file" id="signInput">
+
+      <div style="display:flex;justify-content:space-between">
+        <button class="btn preview" onclick="updateCard()">Preview</button>
+        <button class="btn print" onclick="window.print()">Print</button>
+      </div>
     </div>
-  </div>
 
+    <div class="preview-area">
+      <div class="card">
+        <img id="photoImg" class="photo">
+        <img id="qrImg" class="qr">
+        <img id="signImg" class="sign">
+
+        <div id="panText" class="pan"></div>
+        <div id="nameText" class="name"></div>
+        <div id="fnameText" class="fname"></div>
+        <div id="dobText" class="dob"></div>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 <script>
-function updateCard(){
-  panText.innerText = panInput.value || "";
-  nameText.innerText = nameInput.value || "";
-  fnameText.innerText = fnameInput.value || "";
-  dobText.innerText = dobInput.value || "";
+const ADMIN_USER="admin";
+const ADMIN_PASS="12345";
 
-  if(photoInput.files[0]) photoImg.src = URL.createObjectURL(photoInput.files[0]);
-  if(signInput.files[0]) signImg.src = URL.createObjectURL(signInput.files[0]);
+if(localStorage.getItem("admin")){
+  showDashboard(localStorage.getItem("admin"));
+}
+
+function login(){
+  let u=loginUser.value;
+  let p=loginPass.value;
+  if(u===ADMIN_USER && p===ADMIN_PASS){
+    localStorage.setItem("admin",u);
+    showDashboard(u);
+  }else{
+    alert("Invalid Login");
+  }
+}
+
+function showDashboard(name){
+  loginPage.style.display="none";
+  dashboard.style.display="block";
+  adminName.innerText=name;
+}
+
+function logout(){
+  localStorage.removeItem("admin");
+  location.reload();
+}
+
+function updateCard(){
+  panText.innerText=panInput.value;
+  nameText.innerText=nameInput.value;
+  fnameText.innerText=fnameInput.value;
+  dobText.innerText=dobInput.value;
+
+  if(photoInput.files[0]) photoImg.src=URL.createObjectURL(photoInput.files[0]);
+  if(signInput.files[0]) signImg.src=URL.createObjectURL(signInput.files[0]);
 
   if(panInput.value){
-    QRCode.toDataURL(panInput.value,{width:260},function(err,url){
-      qrImg.src = url;
-    });
+    QRCode.toDataURL(panInput.value,{width:260},(e,url)=>qrImg.src=url);
   }
 }
 </script>
