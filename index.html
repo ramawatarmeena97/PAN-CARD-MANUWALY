@@ -21,20 +21,10 @@ body{
   box-shadow:0 0 20px rgba(0,0,0,.4);
 }
 .login-box h2{text-align:center;color:#1e3c72}
-.login-box input{
-  width:100%;
-  padding:10px;
-  margin:10px 0;
-}
+.login-box input{width:100%;padding:10px;margin:10px 0}
 .login-box button{
-  width:100%;
-  padding:12px;
-  background:#1e3c72;
-  color:white;
-  border:none;
-  border-radius:6px;
-  font-size:16px;
-  cursor:pointer;
+  width:100%;padding:12px;background:#1e3c72;color:white;
+  border:none;border-radius:6px;font-size:16px;cursor:pointer;
 }
 
 /* HEADER */
@@ -46,7 +36,6 @@ body{
   justify-content:space-between;
   align-items:center;
 }
-.header span{font-size:14px}
 .logout{
   background:#dc3545;
   border:none;
@@ -59,23 +48,19 @@ body{
 /* MAIN */
 .main{
   display:flex;
-  padding:20px;
   gap:20px;
+  padding:20px;
 }
 
 /* PANEL */
 .panel{
-  width:30%;
+  width:35%;
   background:white;
   padding:20px;
   border-radius:12px;
 }
 .panel h3{text-align:center;color:#0b2c55}
-.panel input{
-  width:100%;
-  padding:8px;
-  margin:6px 0;
-}
+.panel input{width:100%;padding:8px;margin:6px 0}
 
 /* BUTTONS */
 .btn{
@@ -90,17 +75,17 @@ body{
 .preview{background:#007bff}
 .print{background:#28a745}
 
-/* PREVIEW */
+/* PREVIEW AREA (HIDDEN BY DEFAULT) */
 .preview-area{
-  width:70%;
+  width:65%;
   background:#f5f5f5;
   border-radius:12px;
   padding:15px;
-  display:flex;
+  display:none;
   justify-content:center;
 }
 
-/* CARD */
+/* CARD SCREEN */
 .card{
   width:856px;
   height:539px;
@@ -123,13 +108,23 @@ body{
 /* PRINT */
 @media print{
   .header,.panel{display:none}
+  .preview-area{display:flex}
+
+  .card{
+    width:3.375cm;
+    height:2.225cm;
+  }
+  .pan,.name,.fname,.dob{font-size:0.28cm}
+  .photo{width:0.7cm;height:0.9cm}
+  .sign{width:0.6cm}
+  .qr{width:0.9cm}
 }
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN PAGE -->
+<!-- LOGIN -->
 <div id="loginPage" class="login-box">
   <h2>Admin Login</h2>
   <input id="loginUser" placeholder="Username">
@@ -143,13 +138,14 @@ body{
   <div class="header">
     <div>
       MANUAL PAN CARD PRINT PORTAL<br>
-      <span>Welcome, <b id="adminName"></b></span>
+      <small>Welcome, <b id="adminName"></b></small>
     </div>
     <button class="logout" onclick="logout()">Logout</button>
   </div>
 
   <div class="main">
 
+    <!-- FORM -->
     <div class="panel">
       <h3>PAN DETAILS</h3>
 
@@ -161,12 +157,13 @@ body{
       <input type="file" id="signInput">
 
       <div style="display:flex;justify-content:space-between">
-        <button class="btn preview" onclick="updateCard()">Preview</button>
+        <button class="btn preview" onclick="showPreview()">Preview</button>
         <button class="btn print" onclick="window.print()">Print</button>
       </div>
     </div>
 
-    <div class="preview-area">
+    <!-- PREVIEW -->
+    <div id="previewArea" class="preview-area">
       <div class="card">
         <img id="photoImg" class="photo">
         <img id="qrImg" class="qr">
@@ -192,14 +189,10 @@ if(localStorage.getItem("admin")){
 }
 
 function login(){
-  let u=loginUser.value;
-  let p=loginPass.value;
-  if(u===ADMIN_USER && p===ADMIN_PASS){
-    localStorage.setItem("admin",u);
-    showDashboard(u);
-  }else{
-    alert("Invalid Login");
-  }
+  if(loginUser.value===ADMIN_USER && loginPass.value===ADMIN_PASS){
+    localStorage.setItem("admin",loginUser.value);
+    showDashboard(loginUser.value);
+  }else alert("Invalid Login");
 }
 
 function showDashboard(name){
@@ -213,7 +206,9 @@ function logout(){
   location.reload();
 }
 
-function updateCard(){
+function showPreview(){
+  previewArea.style.display="flex";
+
   panText.innerText=panInput.value;
   nameText.innerText=nameInput.value;
   fnameText.innerText=fnameInput.value;
